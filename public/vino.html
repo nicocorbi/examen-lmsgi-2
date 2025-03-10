@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vinos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+</head>
+<style>
+    td{
+        
+        border: 1px solid black;
+    }
+</style>
+<body>
+    <table>
+        <tr>
+            <th>x</th>
+            <th>y</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+        </tr>
+        
+    </table>
+    <script>
+        function setup() {
+            
+        }
+
+        function draw() {
+            
+            const tr = document.createElement("tr")
+            const td1 = document.createElement("td")
+            const td2= document.createElement("td")
+            tr.appendChild(td1)
+            tr.appendChild(td2)
+            
+            const table = document.querySelector("table")
+            table.appendChild(tr)
+            
+
+        }
+    </script>
+</body>
+</html>

@@ -13,16 +13,16 @@ fetch('https://dummyjson.com/recipes/1')
      const numeroaño= document.createElement("p");
      numeroaño.innerText = `Dificultad: ${año}`;
      document.body.appendChild(numeroaño);
-    // precio 
-    const precio = data.precio;
-        document.body.appendChild(instruccionesElemento);
-        for (let i = 0; i < instructions.length; i++) {
+     // precio 
+     const precio = data.precio;
+     document.body.appendChild(precioElemento);
+        for (let i = 0; i < precio.length; i++) {
             const item = document.createElement("li");
-            item.innerText = instructions[i];
-            instruccionesElemento.appendChild(item);
+            item.innerText = precio[i];
+            precioElemento.appendChild(item);
         }
-    //tipo
-    const tipo = data.tipo;
+     //tipo
+     const tipo = data.tipo;
         const tipoElemento = document.createElement("p");
         tipoElemento.innerText = `tipo: ${tipo}`;
         document.body.appendChild(tipoElemento);
