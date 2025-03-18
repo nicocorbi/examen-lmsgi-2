@@ -1,53 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vinos</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+    <title>Detalle del Vino</title>
 </head>
-<style>
-    td{
-        
-        border: 1px solid black;
-    }
-</style>
 <body>
-    <table>
-        <tr>
-            <th>x</th>
-            <th>y</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>2</td>
-        </tr>
-        
-    </table>
+    <h1>Detalle del Vino</h1>
+
+    <div id="vino-info">
+        <h2 id="vino-nombre"></h2>
+        <p id="vino-año"></p>
+        <p id="vino-tipo"></p>
+        <p id="vino-precio"></p>
+        <p id="vino-stock"></p>
+        <img id="vino-imagen" src="" alt="Imagen del vino" width="200">
+    </div>
+
+    <h2>Catas</h2>
+    <ul id="lista-catas"></ul>
+
     <script>
-        fetch('/vinos/:id')
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => console.log(error))
-        function setup() {
-            
-        }
+        // Obtener el id del vino de la URL (asumimos que está en el formato /vino.html?id=1)
+        const urlParams = new URLSearchParams(window.location.search);
+        const vinoId = urlParams.get('id'); // Obtener el id del vino
 
-        function draw() {
-            
-            const tr = document.createElement("tr")
-            const td1 = document.createElement("td")
-            const td2= document.createElement("td")
-            tr.appendChild(td1)
-            tr.appendChild(td2)
-            
-            const table = document.querySelector("table")
-            table.appendChild(tr)
-            
+        // URL de la API
+        const vinoUrl = `http://localhost:3000/vinos/${vinoId}`;
+        const cataUrl = `http://localhost:3000/cata`;
 
-        }
+        // Función para obtener los detalles del vino
+        fetch(vinoUrl)
+            .then(response => response.json())
+            .then(vino => {
+                // Mostrar la información del vino en la página
+                document.getElementById('vino-nombre').textContent = vino.nombre;
+                document.getElementById('vino-año').textContent = `Año: ${vino.anio}`;
+                document.getElementById('vino-tipo').textContent = `Tipo: ${vino.tipo}`;
+                document.getElementById('vino-precio').textContent = `Precio: $${vino.precio}`;
+                document.getElementById('vino-stock').textContent = `Stock: ${vino.stock}`;
+                document.getElementById('vino-imagen').src = vino.imagen;
+
+                // Ahora obtenemos las catas asociadas a este vino
+                fetch(cataUrl)
+                    .then(response => response.json())
+                    .then(catas => {
+                        // Filtrar las catas para obtener solo las que corresponden a este vino
+                        const catasVino = catas.filter(cata => cata.id_vino == vino.id);
+                        
+                        // Mostrar las catas en la lista
+                        const listaCatas = document.getElementById('lista-catas');
+                        catasVino.forEach(cata => {
+                            const item = document.createElement('li');
+                            item.textContent = `Nota: ${cata.nota} - Comentario: ${cata.comentario}`;
+                            listaCatas.appendChild(item);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener las catas:', error);
+                    });
+            })
+            .catch(error => {
+                console.error('Error al obtener el vino:', error);
+            });
     </script>
 </body>
 </html>
