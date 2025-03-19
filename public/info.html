@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de la Bodega</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .stock-alto {
+            background-color: #c8e6c9;
+        }
+        .stock-bajo {
+            background-color: #fff9c4;
+        }
+        .stock-agotado {
+            background-color: #ffcdd2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Panel de Administración de la Bodega</h1>
+    <h2>Lista de Vinos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Año</th>
+                <th>Tipo</th>
+                <th>Precio</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-vinos"></tbody>
+    </table>
+    <script>
+        const vinosUrl = 'http://localhost:3000/vinos';
+        fetch(vinosUrl)
+            .then(response => response.json())
+            .then(vinos => {
+                const tabla = document.getElementById('tabla-vinos');
+                vinos.forEach(vino => {
+                    const fila = document.createElement('tr');
+                    const imgURL = vino.imagen && vino.imagen.trim() !== "" ? vino.imagen 
+                                : `https://placehold.co/100x150?text=${encodeURIComponent(vino.nombre)}`;
+                    if (vino.stock == 0) {
+                        fila.classList.add('stock-agotado');
+                    } else if (vino.stock > 0 && vino.stock <= 5) {
+                        fila.classList.add('stock-bajo');
+                    } else {
+                        fila.classList.add('stock-alto');
+                    }
+                    fila.innerHTML = `
+                        <td><img src="${imgURL}" alt="Imagen de ${vino.nombre}" width="100"></td>
+                        <td>${vino.nombre}</td>
+                        <td>${vino.anio}</td>
+                        <td>${vino.tipo}</td>
+                        <td>$${vino.precio}</td>
+                        <td>${vino.stock}</td>
+                    `;
+                    tabla.appendChild(fila);
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener los vinos:', error);
+            });
+    </script>
+</body>
+</html>

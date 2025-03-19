@@ -4,23 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Vinos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .vino {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .vino img {
+            width: 150px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
     <h1>Vinos de la Bodega</h1>
-    <ul id="lista-vinos"></ul>
+    <div id="lista-vinos"></div>
 
     <script>
-        
         fetch('http://localhost:3000/vinos')
             .then(response => response.json())  
             .then(data => {
                 const lista = document.getElementById('lista-vinos');
-                
-                
+
                 data.forEach(vino => {
-                    const item = document.createElement('li');
-                    item.textContent = `${vino.nombre} - Año: ${vino.anio}, Tipo: ${vino.tipo}, Precio: $${vino.precio}`;
-                    lista.appendChild(item);  
+                    const item = document.createElement('div');
+                    item.classList.add('vino');
+
+                    const imgURL = vino.imagen && vino.imagen.trim() !== "" ? vino.imagen 
+                                   : `https://placehold.co/150x200?text=${encodeURIComponent(vino.nombre)}`;
+
+                    item.innerHTML = `
+                        <img src="${imgURL}" alt="Imagen de ${vino.nombre}">
+                        <div>
+                            <strong>${vino.nombre}</strong><br>
+                            Año: ${vino.anio}<br>
+                            Tipo: ${vino.tipo}<br>
+                            Precio: $${vino.precio}
+                        </div>
+                    `;
+
+                    lista.appendChild(item);
                 });
             })
             .catch(error => {

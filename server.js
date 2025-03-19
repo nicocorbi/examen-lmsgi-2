@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
+const path = require('path');
 
 app.use(express.static('public'));
 
@@ -44,6 +45,9 @@ app.get('/catas', (req, res) => {
 app.get('/vinos/:id', (req, res) => {
     const vino = db.prepare('SELECT * FROM vinos WHERE id = ?').get(req.params.id);
     res.json(vino);
+});
+app.get('/tabla', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'info.html'));
 });
 
 app.listen(port, () => {
