@@ -10,17 +10,17 @@
     <ul id="lista-vinos"></ul>
 
     <script>
-        // Asegúrate de que la URL sea correcta (http://localhost:3000/vinos)
+        
         fetch('http://localhost:3000/vinos')
-            .then(response => response.json())  // Convierte la respuesta a JSON
+            .then(response => response.json())  
             .then(data => {
                 const lista = document.getElementById('lista-vinos');
                 
-                // Itera sobre los datos de los vinos y agrega un <li> por cada vino
+                
                 data.forEach(vino => {
                     const item = document.createElement('li');
-                    item.textContent = `${vino.nombre} - Año: ${vino.año}, Tipo: ${vino.tipo}, Precio: $${vino.precio}`;
-                    lista.appendChild(item);  // Añade el vino a la lista
+                    item.textContent = `${vino.nombre} - Año: ${vino.anio}, Tipo: ${vino.tipo}, Precio: $${vino.precio}`;
+                    lista.appendChild(item);  
                 });
             })
             .catch(error => {
